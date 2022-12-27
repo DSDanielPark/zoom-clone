@@ -17,12 +17,14 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 
+const sockets = [];
 
 wss.on("connection", (socket) => {
+    sockets.push(socket);
     console.log("connect to brower!!");
     socket.on("close", () => console.log("disconnected from the brower"));
     socket.on("message", (message) => {
-        console.log(message.toString('utf-8'));
+        sockets.forEach(aSocket => aSocket.send(message));        
     });
     socket.send("hello!!!");
 });
