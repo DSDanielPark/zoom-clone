@@ -38,4 +38,11 @@ function handleSubmit(event){
     input.value = "";
 }
 
-messageForm.addEventListener("submit", handleSubmit)
+function handleNickSumbit(event){
+    event.preventDefault();
+    const input = nickForm.querySelector("input");
+    socket.send(input.value);
+}
+
+messageForm.addEventListener("submit", handleSubmit);
+nickForm.addEventListener("submit", handleNickSumbit);
