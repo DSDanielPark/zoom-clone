@@ -17,11 +17,11 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 
-function handleConnection(socket) {
-    console.log(socket)
-}
 
-wss.on("connection", handleConnection)
+wss.on("connection", (socket) => {
+    socket.send("hello!!!");
+    console.log("connect to brower!!")
+})
 
 // app.listen(3000, handleListen);
 server.listen(3000, handleListen);
