@@ -13,3 +13,9 @@ socket.addEventListener("message", (message) => {
 socket.addEventListener("close", () => {
     console.log("Conneted from server: X");
 });
+
+
+// 아무 조건이 없으니까 10초뒤에 그냥 다음 익명함수가 실행되는데 socket.send 이다. 브라우저(프론트)로부터
+setTimeout(() => {
+    socket.send("hello from the brower!!");
+}, 10000);

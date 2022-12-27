@@ -19,10 +19,13 @@ const wss = new WebSocket.Server({ server });
 
 
 wss.on("connection", (socket) => {
-    socket.send("hello!!!");
+    console.log("connect to brower!!");
     socket.on("close", () => console.log("disconnected from the brower"));
-    console.log("connect to brower!!")
-})
+    socket.on("message", (message) => {
+        console.log(message.toString('utf-8'));
+    });
+    socket.send("hello!!!");
+});
 
 // app.listen(3000, handleListen);
 server.listen(3000, handleListen);
