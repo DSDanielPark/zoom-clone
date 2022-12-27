@@ -2,7 +2,8 @@
 
 
 const messageList = document.querySelector("ul");
-const messageForm = document.querySelector("form");
+const nickForm = document.querySelector("#nick");
+const messageForm = document.querySelector("#message");
 
 const socket = new WebSocket(`ws://${window.location.host}`)
 
@@ -11,7 +12,10 @@ socket.addEventListener("open", () => {
 })
 
 socket.addEventListener("message", (message) => {
-    console.log("just got new message:", message.data, "from the server");
+    const li = document.createElement("li");
+    li.innerText = message.data //li에다가 메시지 입력
+    messageList.append(li); //계속 위로 올라가게 됨
+
 })
 
 
