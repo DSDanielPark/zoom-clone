@@ -6,7 +6,7 @@ socket.addEventListener("open", () => {
 })
 
 socket.addEventListener("message", (message) => {
-    console.log("just got message:", message, "from the server");
+    console.log("just got new message:", message.data, "from the server");
 })
 
 
