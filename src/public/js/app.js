@@ -7,6 +7,13 @@ const messageForm = document.querySelector("#message");
 
 const socket = new WebSocket(`ws://${window.location.host}`)
 
+
+function makeMessage(type, payload) {
+    const msg = {type, payload};
+    return JSON.stringify(msg);
+}
+
+
 socket.addEventListener("open", () => {
     console.log("Conneted to server check!!");
 })
@@ -33,15 +40,14 @@ socket.addEventListener("close", () => {
 function handleSubmit(event){
     event.preventDefault();
     const input = messageForm.querySelector("input");
-    socket.send(input.value)
-    console.log(input.value)
+    socket.send(makeMessage("new_message", input.value));
     input.value = "";
 }
 
 function handleNickSumbit(event){
     event.preventDefault();
     const input = nickForm.querySelector("input");
-    socket.send(input.value);
+    socket.send(makeMessage("nickname", input.value));
 }
 
 messageForm.addEventListener("submit", handleSubmit);
