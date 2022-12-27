@@ -24,9 +24,9 @@ wss.on("connection", (socket) => {
     console.log("connect to brower!!");
     socket.on("close", () => console.log("disconnected from the brower"));
     socket.on("message", (message) => {
-        sockets.forEach(aSocket => aSocket.send(message));        
+        sockets.forEach(aSocket => aSocket.send(message.toString('utf-8')));        
     });
-    socket.send("hello!!!");
+    // socket.send("hello!!!");
 });
 
 // app.listen(3000, handleListen);
