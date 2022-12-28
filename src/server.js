@@ -21,16 +21,20 @@ const sockets = [];
 
 wss.on("connection", (socket) => {
     sockets.push(socket);
+    socket["nickname"] = "Anon"
     console.log("connect to brower!!");
     socket.on("close", () => console.log("disconnected from the brower"));
-    socket.on("message", (message) => {
-        const parsed = JSON.parse(message.toString('utf-8'));
-        // console.log(parsed, message.toString('utf-8'));
-        if (parsed.type === "new_message"){
-        sockets.forEach(aSocket => aSocket.send(parsed.payload));        
-        } else if(parsed.type === "nickname"){
-            console.log(parsed.payload)
+    socket.on("message", (msg) => {
+        const message = JSON.parse(msg.toString('utf-8'));
+
+        switch(message.type) {
+            case "new_message":
+                sockets.forEach(aSocket => aSocket.send(`${socket.nickname}: ${message.payload}`));        
+            case "nickname":
+                socket["nickname"] = message.payload;
+                console.log(parsed.payload)
         }
+
     });
     // socket.send("hello!!!");
 });
