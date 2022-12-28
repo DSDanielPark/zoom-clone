@@ -17,27 +17,33 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 
-const sockets = [];
+// const sockets = [];
 
-wss.on("connection", (socket) => {
-    sockets.push(socket);
-    socket["nickname"] = "Anon"
-    console.log("connect to brower!!");
-    socket.on("close", () => console.log("disconnected from the brower"));
-    socket.on("message", (msg) => {
-        const message = JSON.parse(msg.toString('utf-8'));
+// wss.on("connection", (socket) => {
+//     sockets.push(socket);
+//     socket["nickname"] = "Anon"
+//     console.log("connect to brower!!");
+//     socket.on("close", () => console.log("disconnected from the brower"));
 
-        switch(message.type) {
-            case "new_message":
-                sockets.forEach(aSocket => aSocket.send(`${socket.nickname}: ${message.payload}`));        
-            case "nickname":
-                socket["nickname"] = message.payload;
-                console.log(parsed.payload)
-        }
+//     socket.on("message", (msg) => {
+//         const message = JSON.parse(msg.toString('utf-8'));
 
-    });
-    // socket.send("hello!!!");
-});
+//         switch(message.type) {
+//             case "new_message":
+//                 console.log(socket.nickname)
+//                 sockets.forEach(aSocket => aSocket.send(`${socket.nickname}: ${message.payload}`));        
+//             case "nickname":
+//                 socket["nickname"] = message.payload;
+//                 console.log(message.payload)
+//         }
+
+//     });
+//     // socket.send("hello!!!");
+// });
+
+
+
+
 
 // app.listen(3000, handleListen);
 server.listen(3000, handleListen);
