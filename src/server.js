@@ -24,7 +24,13 @@ wss.on("connection", (socket) => {
     console.log("connect to brower!!");
     socket.on("close", () => console.log("disconnected from the brower"));
     socket.on("message", (message) => {
-        sockets.forEach(aSocket => aSocket.send(message.toString('utf-8')));        
+        const parsed = JSON.parse(message.toString('utf-8'));
+        // console.log(parsed, message.toString('utf-8'));
+        if (parsed.type === "new_message"){
+        sockets.forEach(aSocket => aSocket.send(parsed.payload));        
+        } else if(parsed.type === "nickname"){
+            console.log(parsed.payload)
+        }
     });
     // socket.send("hello!!!");
 });
