@@ -11,7 +11,7 @@ app.use("/public", express.static(__dirname + "/public"));
 app.get("/", (req, res) => res.render("home"));
 app.get("/*", (req, res) => res.redirect("/"));
 
-const handleListen = () => console.log('Listening on http://localhost:3000 ws://localhost:3000');
+const handleListen = () => console.log('Listening on http://localhost:3000');
 
 const httpServer = http.createServer(app);
 const wsServer = socketIO(httpServer);
@@ -25,13 +25,11 @@ wsServer.on("connection", (socket) => {
 
 
     socket.on("enter_room", (roomName, done) => {
-        console.log(socket.id);
-        console.log(socket.rooms);
-        socket.join("roomName");
-        console.log(socket.rooms);
-
+        // console.log(socket.id);
+        // console.log(socket.rooms);
+        socket.join(roomName);
         done();
-
+        socket.to(roomName).emit("welcome");
     });
 });
 
