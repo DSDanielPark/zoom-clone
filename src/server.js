@@ -30,9 +30,8 @@ wsServer.on("connection", (socket) => {
         socket.join("roomName");
         console.log(socket.rooms);
 
-        setTimeout( () => {
-        done("I'm msg in back-end. did you see me?");
-        }, 2000);
+        done();
+
     });
 });
 
