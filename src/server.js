@@ -23,7 +23,7 @@ wsServer.on("connection", (socket) => {
 
         setTimeout( () => {
         done("I'm msg in back-end. did you see me?");
-        });
+        }, 2000);
     });
 });
 
