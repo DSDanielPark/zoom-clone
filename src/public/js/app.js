@@ -3,8 +3,8 @@ const socket = io();
 const welcome = document.getElementById("welcome");
 const form = welcome.querySelector("form");
 
-function backendDone() {
-    console.log("back-end done");
+function backendDone(msg) {
+    console.log(`back end say:`, msg);
 }
 
 

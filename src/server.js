@@ -22,7 +22,7 @@ wsServer.on("connection", (socket) => {
         console.log(roomName);
 
         setTimeout( () => {
-        done();
+        done("I'm msg in back-end. did you see me?");
         });
     });
 });
