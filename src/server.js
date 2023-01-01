@@ -29,19 +29,22 @@ wsServer.on("connection", (socket) => {
         console.log(socket.rooms);
         socket.join(roomName);
         done();
-        socket.to(roomName).emit("welcome");
+        
+        socket.to(roomName).emit("welcome", socket.nickname);
 
         // disconnecting(user가 방을 나갔을 경우 알리는 이벤트)
         socket.on("disconnecting", () => {
             socket.rooms.forEach((room) => 
-                socket.to(room).emit("bye"));
+                socket.to(room).emit("bye", socket.nickname));
         });
 
         socket.on("new_message", (msg, room, done) => {
-            socket.to(room).emit("new_message", msg);
+            socket.to(room).emit("new_message", `${socket.nickname}: ${msg}`);
             done();
-
         })
+        
+        socket.on("nickname", nickname => (socket["nickname"] = nickname));
+
     });
 });
 

@@ -20,12 +20,20 @@ function addMessage(message){
 
 function handleMessageSubmit(event) {
     event.preventDefault();
-    const input = room.querySelector("input");
+    const input = room.querySelector("#msg input");
     socket.emit("new_message", input.value, roomName, () => {
         addMessage(`You: ${input.value}`);
     input.value = "";
     });
 }
+
+function handleNickameSubmit(event) {
+    event.preventDefault();
+    const input = room.querySelector("#name input");
+    socket.emit("nickname", input.value);
+    input.value = "";
+    ;
+};
 
 function showRoom() {
     welcome.hidden = true;
@@ -33,14 +41,18 @@ function showRoom() {
     const h3 = room.querySelector("h3");
     h3.innerText = `Room ${roomName}`;
 
-    const form = room.querySelector("form");
-    form.addEventListener("submit", handleMessageSubmit);
+    const msgFrom = room.querySelector("#msg");
+    const nameFrom = room.querySelector("#name");
+    
+    msgFrom.addEventListener("submit", handleMessageSubmit);
+    nameFrom.addEventListener("submit", handleNickameSubmit);
+
 }
 
 
 function handleRoomSubmit(event){
     event.preventDefault();
-    const input = form.querySelector("input");
+    const input = welcome.querySelector("input");
 
     socket.emit("enter_room", input.value, showRoom);
 
@@ -71,13 +83,13 @@ form.addEventListener("submit", handleRoomSubmit);
 
 
 //addEventListener 대신 socket.on 사용한다.
-socket.on("welcome", () => {
-    console.log("welcome");
+socket.on("welcome", (user) => {
+    console.log(`${user} welcome!!`);
     addMessage("someone joind!!!");
 });
 
-socket.on("bye", () => {
-    addMessage("someone left!!!");
+socket.on("bye", (left) => {
+    addMessage(`${left} left!!!`);
 });
 
 
