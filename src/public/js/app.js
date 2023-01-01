@@ -94,4 +94,6 @@ socket.on("bye", (left) => {
 
 
 socket.on("new_message", addMessage);
-// socket.on("new_message", (mes) => {addMessage(msg)}); 랑 동일함
+// socket.on("new_message", (msg) => {addMessage(msg)}); 랑 동일함
+
+socket.on("room_change", console.log);

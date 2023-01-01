@@ -16,18 +16,18 @@ const handleListen = () => console.log('Listening on http://localhost:3000');
 const httpServer = http.createServer(app);
 const wsServer = socketIO(httpServer);
 
-function publicRooms() {
+function publicRoom() {
     const {sockets: {adapter: {sids, rooms}}} = wsServer;
     // const sids = wsServer.sockets.adapter.sids;
     // const rooms = wsServer.sockets.adapter.rooms; 위와 동일한 표현
     const PublicRooms = [];
     rooms.forEach((_, key) => {
         if (sids.get(key) === undefined) {
-            publicRooms.push(key);
+            PublicRooms.push(key);
         }
     });
 
-    return publicRooms
+    return PublicRooms
 
 
     
@@ -52,11 +52,16 @@ wsServer.on("connection", (socket) => {
         done();
 
         socket.to(roomName).emit("welcome", socket.nickname);
+        wsServer.sockets.emit("room_change", publicRoom());
 
         // disconnecting(user가 방을 나갔을 경우 알리는 이벤트)
         socket.on("disconnecting", () => {
             socket.rooms.forEach((room) => 
                 socket.to(room).emit("bye", socket.nickname));
+        });
+
+        socket.on("disconnect", () => {
+            wsServer.sockets.emit("room_change", publicRoom());
         });
 
         socket.on("new_message", (msg, room, done) => {
