@@ -26,10 +26,16 @@ wsServer.on("connection", (socket) => {
 
     socket.on("enter_room", (roomName, done) => {
         // console.log(socket.id);
-        // console.log(socket.rooms);
+        console.log(socket.rooms);
         socket.join(roomName);
         done();
         socket.to(roomName).emit("welcome");
+
+        // disconnecting(user가 방을 나갔을 경우 알리는 이벤트)
+        socket.on("disconnecting", () => {
+            socket.rooms.forEach((room) => 
+                socket.to(room).emit("bye"));
+        });
     });
 });
 

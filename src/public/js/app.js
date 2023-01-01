@@ -67,3 +67,6 @@ socket.on("welcome", () => {
     addMessage("someone joind!!!");
 });
 
+socket.on("bye", () => {
+    addMessage("someone left!!!");
+});
