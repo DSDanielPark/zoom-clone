@@ -16,7 +16,22 @@ const handleListen = () => console.log('Listening on http://localhost:3000');
 const httpServer = http.createServer(app);
 const wsServer = socketIO(httpServer);
 
+function publicRooms() {
+    const {sockets: {adapter: {sids, rooms}}} = wsServer;
+    // const sids = wsServer.sockets.adapter.sids;
+    // const rooms = wsServer.sockets.adapter.rooms; 위와 동일한 표현
+    const PublicRooms = [];
+    rooms.forEach((_, key) => {
+        if (sids.get(key) === undefined) {
+            publicRooms.push(key);
+        }
+    });
 
+    return publicRooms
+
+
+    
+}
 
 
 
