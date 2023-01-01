@@ -16,10 +16,16 @@ const handleListen = () => console.log('Listening on http://localhost:3000');
 const httpServer = http.createServer(app);
 const wsServer = socketIO(httpServer);
 
+
+
+
+
+
 wsServer.on("connection", (socket) => {
     // console.log(socket);
 
     socket.onAny((event) => {
+        // console.log(wsServer.sockets.adapter);
         console.log(`Socket Event: ${event}`);
     })
 
@@ -29,7 +35,7 @@ wsServer.on("connection", (socket) => {
         console.log(socket.rooms);
         socket.join(roomName);
         done();
-        
+
         socket.to(roomName).emit("welcome", socket.nickname);
 
         // disconnecting(user가 방을 나갔을 경우 알리는 이벤트)
