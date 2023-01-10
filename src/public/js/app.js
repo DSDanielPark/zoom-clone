@@ -98,9 +98,9 @@ socket.on("new_message", addMessage);
 
 socket.on("room_change", (rooms) => {
     const roomList = welcome.querySelector("ul");
+    roomList.innerHTML = "";
     // 룸이 애플리케이션안에서 하나도 없으면 그냥 비워두려고 조건문 검
     if (room.length === 0) {
-        roomList.innerHTML = "";
         return;
     }
     // roomlist를 표기함
