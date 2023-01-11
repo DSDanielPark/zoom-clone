@@ -10,7 +10,10 @@ html(lang="en")
         header
             h1 fun project
         main
-            video#myFace(autoplay, playsinline, width="400", height="400")
+            div#myStream
+                video#myFace(autoplay, playsinline, width="400", height="400")
+                button#mute Mute
+                button#camera Trun Camera Off
         //- playsinsline은 모바일을 위한 셋팅
         script(src="/socket.io/socket.io.js")
         script(src="/public/js/app.js")
