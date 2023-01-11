@@ -25,7 +25,9 @@ async function getMedia() {
 getMedia();
 
 function handleMuteClick() {
-    console.log(myStream.getAudioTracks()); //스트림에 닮긴 트랙 확인
+    myStream
+        .getAudioTracks() //스트림에 닮긴 트랙 확인
+        .forEach((track) => {track.enabled = !track.enabled})
     if(!muted){
         muteBtn.innerText = "Unmute";
         muted = true;
@@ -36,6 +38,9 @@ function handleMuteClick() {
 }
 
 function handleCameraClick() {
+    myStream
+        .getVideoTracks() //스트림에 닮긴 트랙 확인
+        .forEach((track) => {track.enabled = !track.enabled})
     if(cameraOff){
         cameraBtn.innerText = "Turn Camera Off";
         cameraOff = false;
