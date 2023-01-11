@@ -83,12 +83,18 @@ form.addEventListener("submit", handleRoomSubmit);
 
 
 //addEventListener 대신 socket.on 사용한다.
-socket.on("welcome", (user) => {
+socket.on("welcome", (user, newCount) => {
+    const h3 = room.querySelector("h3");
+    h3.innerText = `Room ${roomName} joinedPeopleNumb:(${newCount}) `;
+
     console.log(`${user} welcome!!`);
     addMessage("someone joind!!!");
 });
 
-socket.on("bye", (left) => {
+socket.on("bye", (left, newCount) => {
+    const h3 = room.querySelector("h3");
+    h3.innerText = `Room ${roomName} joinedPeopleNumb:(${newCount})`;
+
     addMessage(`${left} left!!!`);
 });
 
