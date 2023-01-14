@@ -5,15 +5,13 @@ const muteBtn = document.getElementById("mute");
 const cameraBtn = document.getElementById("camera");
 const camerasSelect = document.getElementById("cameras");
 
+// Phone Call Code
 
-const welcome = document.getElementById("welcome");
-const call = document.getElementById("call");
-
-call.hidden = true;
 
 let myStream;
 let muted = false;
 let cameraOff = false;
+let roomName = "";
 
 async function getCameras() {
     try{
@@ -106,6 +104,8 @@ camerasSelect.addEventListener("input", handleCameraChange);
 
 // Welcome Form (choose a room)
 // 여기서부터는 이제 welcome form에서 받았던거 다시 뱉어주는거
+const welcome = document.getElementById("welcome");
+const call = document.getElementById("call");
 
 const welcomeForm = welcome.querySelector("form");
 
@@ -121,8 +121,16 @@ function handleWelcomeSubmit(event) {
     const input = welcomeForm.querySelector("input");
     // console.log(input.value);
     socket.emit("join_room", input.value, startMedia);
+    roomName = input.value;
     input.value = "";
     startMedia();
 }
 
-welcomeForm.addEventListener("submit", handleWelcomeSubmit); 
+welcomeForm.addEventListener("submit", handleWelcomeSubmit);
+
+
+// Socket Code
+
+socket.on("welcome", () => {
+    console.log("someone joined!");
+})
