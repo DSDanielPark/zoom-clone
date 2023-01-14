@@ -134,8 +134,10 @@ welcomeForm.addEventListener("submit", handleWelcomeSubmit);
 socket.on("welcome", async() => {
     // console.log("someone joined!");
     const offer = await myPeerConnection.createOffer();
+    myPeerConnection.setRemoteDescription(offer);
     console.log(offer);
     socket.emit("offer", offer, roomName);
+    console.log("sent the offer");
 });
 
 // 이 부분은 위에 브라우저가 아닌 offer를 받는 브라우저에서 실행될거임
@@ -143,14 +145,33 @@ socket.on("offer", async(offer) => {
     myPeerConnection.setRemoteDescription(offer);
     // console.log(offer);
     const answer = await myPeerConnection.createAnswer();
-    console.log(answer);
+    // console.log(answer);
+    myPeerConnection.setRemoteDescription(answer);
+    socket.emit("answer", answer, roomName);
+    console.log("sent the answer");
 })
+
+// 여긴 peerA
+socket.on("answer", answer => {
+    console.log("receive the answer");
+    myPeerConnection.setRemoteDescription(answer);
+})
+
 
 
 // RTC code
 
 function makeConnection() {
     myPeerConnection = new RTCPeerConnection();
+    myPeerConnection.addEventListener("icecandidate", handleIce);
     // console.log(myStream.getTracks());
-    myStream.getTracks().forEach(track => myPeerConnection.addTrack(track, myStream));
+    myStream
+        .getTracks()
+        .forEach(track => myPeerConnection.addTrack(track, myStream));
+}
+
+function handleIce(data){
+    console.log("ice cnadidate");
+    console.log(data);
+    
 }
