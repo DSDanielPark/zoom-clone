@@ -64,7 +64,7 @@ async function getMedia(deviceId) {
     }
 }
 
-getMedia();
+// getMedia();
 
 function handleMuteClick() {
     myStream
@@ -102,14 +102,27 @@ cameraBtn.addEventListener("click", handleCameraClick);
 camerasSelect.addEventListener("input", handleCameraChange);
 
 
+
+
+// Welcome Form (choose a room)
 // 여기서부터는 이제 welcome form에서 받았던거 다시 뱉어주는거
 
 const welcomeForm = welcome.querySelector("form");
 
+function startMedia() {
+    welcome.hidden = true;
+    call.hidden = false;
+    getMedia();
+}
+
+
 function handleWelcomeSubmit(event) {
     event.preventDefault();
     const input = welcomeForm.querySelector("input");
-    console.log(input.value);
+    // console.log(input.value);
+    socket.emit("join_room", input.value, startMedia);
+    input.value = "";
+    startMedia();
 }
 
 welcomeForm.addEventListener("submit", handleWelcomeSubmit); 
