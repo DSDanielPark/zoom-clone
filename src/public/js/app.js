@@ -134,7 +134,7 @@ welcomeForm.addEventListener("submit", handleWelcomeSubmit);
 socket.on("welcome", async() => {
     // console.log("someone joined!");
     const offer = await myPeerConnection.createOffer();
-    myPeerConnection.setRemoteDescription(offer);
+    myPeerConnection.setLocalDescription(offer);
     console.log(offer);
     socket.emit("offer", offer, roomName);
     console.log("sent the offer");
@@ -146,7 +146,7 @@ socket.on("offer", async(offer) => {
     // console.log(offer);
     const answer = await myPeerConnection.createAnswer();
     // console.log(answer);
-    myPeerConnection.setRemoteDescription(answer);
+    myPeerConnection.setLocalDescription(answer);
     socket.emit("answer", answer, roomName);
     console.log("sent the answer");
 })
