@@ -10,7 +10,8 @@ const camerasSelect = document.getElementById("cameras");
 let myStream;
 let muted = false;
 let cameraOff = false;
-let roomName = "";
+let roomName;
+let myPeerConnection;
 
 
 async function getCameras() {
@@ -108,7 +109,7 @@ const call = document.getElementById("call");
 
 const welcomeForm = welcome.querySelector("form");
 
-async function startMedia() {
+async function initCall() {
     welcome.hidden = true;
     call.hidden = false;
     await getMedia();
@@ -116,21 +117,40 @@ async function startMedia() {
 }
 
 
-function handleWelcomeSubmit(event) {
+async function handleWelcomeSubmit(event) {
     event.preventDefault();
     const input = welcomeForm.querySelector("input");
+    await initCall();
     // console.log(input.value);
-    socket.emit("join_room", input.value, startMedia);
+    socket.emit("join_room", input.value);
     roomName = input.value;
     input.value = "";
-    startMedia();
+    initCall();
 }
-
 welcomeForm.addEventListener("submit", handleWelcomeSubmit);
 
-
 // Socket Code
+// 이 부분은 이미 방에 들어가있는 브라우저에서 실행될거임 PeerA
+socket.on("welcome", async() => {
+    // console.log("someone joined!");
+    const offer = await myPeerConnection.createOffer();
+    console.log(offer);
+    socket.emit("offer", offer, roomName);
+});
 
-socket.on("welcome", () => {
-    console.log("someone joined!");
+// 이 부분은 위에 브라우저가 아닌 offer를 받는 브라우저에서 실행될거임
+socket.on("offer", async(offer) => {
+    myPeerConnection.setRemoteDescription(offer);
+    // console.log(offer);
+    const answer = await myPeerConnection.createAnswer();
+    console.log(answer);
 })
+
+
+// RTC code
+
+function makeConnection() {
+    myPeerConnection = new RTCPeerConnection();
+    // console.log(myStream.getTracks());
+    myStream.getTracks().forEach(track => myPeerConnection.addTrack(track, myStream));
+}
