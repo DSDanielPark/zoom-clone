@@ -5,13 +5,13 @@ const muteBtn = document.getElementById("mute");
 const cameraBtn = document.getElementById("camera");
 const camerasSelect = document.getElementById("cameras");
 
+
 // Phone Call Code
-
-
 let myStream;
 let muted = false;
 let cameraOff = false;
 let roomName = "";
+
 
 async function getCameras() {
     try{
@@ -62,8 +62,7 @@ async function getMedia(deviceId) {
     }
 }
 
-// getMedia();
-
+// getMedia(); 이거는 이제 함수 안으로 들어감
 function handleMuteClick() {
     myStream
         .getAudioTracks() //스트림에 닮긴 트랙 확인
@@ -109,10 +108,11 @@ const call = document.getElementById("call");
 
 const welcomeForm = welcome.querySelector("form");
 
-function startMedia() {
+async function startMedia() {
     welcome.hidden = true;
     call.hidden = false;
-    getMedia();
+    await getMedia();
+    makeConnection();
 }
 
 
