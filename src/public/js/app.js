@@ -157,21 +157,39 @@ socket.on("answer", answer => {
     myPeerConnection.setRemoteDescription(answer);
 })
 
+socket.on("ice", (ice, roomName) => {
+    socket.to(roomName).emit("ice", ice);
+})
 
+socket.on("ice", ice => {
+    console.log("receive candidate")
+    myPeerConnection.addIceCandidate(ice);
+})
 
 // RTC code
 
 function makeConnection() {
     myPeerConnection = new RTCPeerConnection();
     myPeerConnection.addEventListener("icecandidate", handleIce);
+    myPeerConnection.addEventListener("addstream", handleAddStream);
     // console.log(myStream.getTracks());
     myStream
         .getTracks()
         .forEach(track => myPeerConnection.addTrack(track, myStream));
 }
 
+
+// 브라우저간(피어간) 데이터 교환이 이루어짐
 function handleIce(data){
-    console.log("ice cnadidate");
-    console.log(data);
-    
+    socket.emit("ice", data.candidate, roomName);
+    console.log("sent ice cnadidate");
+    console.log(data);   
+}
+
+function handleAddStream(data) {
+    // console.log("got an stream data from my peer");
+    // console.log("Peer's stream", data.stream);
+    // console.log("My stream", myStream);
+    const peerFace = document.getElementById("peerFace");
+    peerFace.strObject = data.stream;
 }
