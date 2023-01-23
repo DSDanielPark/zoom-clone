@@ -157,10 +157,6 @@ socket.on("answer", answer => {
     myPeerConnection.setRemoteDescription(answer);
 })
 
-socket.on("ice", (ice, roomName) => {
-    socket.to(roomName).emit("ice", ice);
-})
-
 socket.on("ice", ice => {
     console.log("receive candidate")
     myPeerConnection.addIceCandidate(ice);
@@ -200,7 +196,6 @@ function handleAddStream(data) {
     // console.log("Peer's stream", data.stream);
     // console.log("My stream", myStream);
     const peerFace = document.getElementById("peerFace");
-    console.log(data.stream)
-    
-    // peerFace.srcObject = data.stream;
+    // console.log(data.stream)
+    peerFace.srcObject = data.stream;
 }
