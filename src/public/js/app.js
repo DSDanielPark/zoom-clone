@@ -90,10 +90,20 @@ function handleCameraClick() {
     }
 }
 
+
 async function handleCameraChange() {
-    // console.log(camerasSelect.value);
     await getMedia(camerasSelect.value);
-}
+    // getMedia에 보면 deviceId를 기반으로 새로운 비디오 스트림을 create하므로 바로 변수 만들어서 
+    // 넣어주면 됨 그래서 videoTrack을 밑에다가 넣는거임
+    if (myPeerConnection) {
+      const videoTrack = myStream.getVideoTracks()[0];
+      // video sender는 webrtc 과정들을 거쳐서 이제 스트림을 주고 받을 수 있으면 그 사이의 데이터 교환 정도
+      const videoSender = myPeerConnection
+        .getSenders()
+        .find((sender) => sender.track.kind === "video");
+      videoSender.replaceTrack(videoTrack);
+    }
+  }
 
 muteBtn.addEventListener("click", handleMuteClick);
 cameraBtn.addEventListener("click", handleCameraClick);
@@ -164,15 +174,6 @@ socket.on("ice", ice => {
 
 // RTC code
 
-// function makeConnection() {
-//     myPeerConnection = new RTCPeerConnection();
-//     myPeerConnection.addEventListener("icecandidate", handleIce);
-//     myPeerConnection.addEventListener("addstream", handleAddStream);
-//     console.log(myStream);
-//     myStream
-//         .getTracks()
-//         .forEach((track) => myPeerConnection.addTrack(track, myStream));
-// }
 
 function makeConnection() {
     myPeerConnection = new RTCPeerConnection();
