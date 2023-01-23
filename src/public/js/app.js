@@ -12,6 +12,7 @@ let muted = false;
 let cameraOff = false;
 let roomName;
 let myPeerConnection;
+let myDataChannel;
 
 
 async function getCameras() {
@@ -140,9 +141,17 @@ async function handleWelcomeSubmit(event) {
 welcomeForm.addEventListener("submit", handleWelcomeSubmit);
 
 // Socket Code
-// 이 부분은 이미 방에 들어가있는 브라우저에서 실행될거임 PeerA
+// 이 부분은 이미 방에 들어가있는 브라우저에서 실행될거임 
+// Peer A
 socket.on("welcome", async() => {
     // console.log("someone joined!");
+
+    // 여기부터 3줄은 데이터 채널용으로 중간에는 스킵, 오퍼를 하는 쪽에서 일단 데이터 채널을 파고
+    myDataChannel = myPeerConnection.createDataChannel("chat");
+    myDataChannel.addEventListener("message", (event) => console.log(event.data));
+    console.log("made data channel"); 
+    //이제 다른 피어는 데이터 채널이 이미 존재하므로 event listener만 만들면 됨
+
     const offer = await myPeerConnection.createOffer();
     myPeerConnection.setLocalDescription(offer);
     console.log(offer);
@@ -151,7 +160,22 @@ socket.on("welcome", async() => {
 });
 
 // 이 부분은 위에 브라우저가 아닌 offer를 받는 브라우저에서 실행될거임
+// Peer B
 socket.on("offer", async(offer) => {
+
+    // 145번 코드에서 오퍼하는쪽에서 데이터 채널을 팠으면 다음과 같이 이벤트 리스너를 생성해주기만 하면 된다.
+    myPeerConnection.addEventListener("datachannel", (event) => {
+        myDataChannel = event.channel;   // 여기에도 동일하게 myDataChannel이라는 변수 선언해줘야함
+        myDataChannel.addEventListener("message", (event) =>
+          console.log(event.data)
+        );
+      });
+      console.log("received the offer");
+    // 여기까지 데이터 채널에 대한 간단한 예시
+
+
+
+
     myPeerConnection.setRemoteDescription(offer);
     // console.log(offer);
     const answer = await myPeerConnection.createAnswer();
@@ -160,6 +184,9 @@ socket.on("offer", async(offer) => {
     socket.emit("answer", answer, roomName);
     console.log("sent the answer");
 })
+
+
+
 
 // 여긴 peerA
 socket.on("answer", answer => {
