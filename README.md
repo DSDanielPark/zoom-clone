@@ -12,7 +12,6 @@ Is hereby recognized by Nomad Coders as having completed and graduated from:
 
 Having demonstrated mastery of the skills:
 WebSockets, SocketIO, WebRTC
-Over a period of:
-1주 완성반
+
 Nomad Coders. 2023년 1월 9일
 ```
